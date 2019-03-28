@@ -1,33 +1,37 @@
 package sk.itsovy.kaufland;
 
-import java.nio.channels.ClosedChannelException;
-import java.nio.channels.ClosedSelectorException;
 import java.util.Date;
 import java.util.LinkedList;
 
+import sk.itsovy.kaufland.Exceptions.BillClosedException;
+import sk.itsovy.kaufland.Exceptions.BillOverLoadedException;
 import sk.itsovy.kaufland.Models.Item;
 import sk.itsovy.kaufland.Models.Food.Fruit;
 import sk.itsovy.kaufland.interfaces.DraftInterface;
 import sk.itsovy.kaufland.interfaces.PcsInterface;
 
 public class Bill {
-	boolean end = false;
+	private boolean end = false;
 	Date endDate = null;
+	private double totalPrice = 0;
 	private LinkedList<Item> list ;
 	public Bill() {
 		list = new LinkedList<Item>();
 	}
-	public void add(Item i) {
+	public void add(Item i) throws BillOverLoadedException, BillClosedException {
 		if(i == null) {
 			return;
 		}
 		if(list.size() == 7) {
-			throw new ArrayIndexOutOfBoundsException("Limit of bill exceed");
+			throw new BillOverLoadedException("Maximum bill items count exceed");
 		}
 		if(end) {
-		//	throw new ClosedChannelException("Bill is closed");
+			throw new BillClosedException("Bill is closed");
 		}
 		list.add(i);
+	}
+	public LinkedList<Item> getBill(){
+		return list;
 	}
 	public void remove(Item i) {
 		list.remove(i);
@@ -35,11 +39,20 @@ public class Bill {
 	public int getCount() {
 		return list.size();
 	}
+	public boolean isEnd() {
+		return end;
+	}
+	public double getTotalPrice() {
+		return totalPrice;
+	}
 	public void end() {
 		if(end == false) {
 			endDate = new Date();
 		}
 		end = true;
+		for(Item i:list) {
+			totalPrice+=i.getTotalPrice();
+		}
 	}
 	public void print() {
 		if(getCount() == 0) {
@@ -59,7 +72,10 @@ public class Bill {
 			}
 		}
 		if(end) {
-			System.out.println("end:"+endDate);
+			System.out.println("end: "+endDate);
 		}
+	}
+	public Date getDate() {
+		return endDate;
 	}
 }
