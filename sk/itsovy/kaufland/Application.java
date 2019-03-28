@@ -1,9 +1,15 @@
 package sk.itsovy.kaufland;
 
+import java.io.IOException;
+
+import org.json.simple.parser.ParseException;
+import org.w3c.dom.DOMException;
+
 import sk.itsovy.kaufland.Database.Database;
 import sk.itsovy.kaufland.Exceptions.BillClosedException;
 import sk.itsovy.kaufland.Exceptions.BillNotClosedException;
 import sk.itsovy.kaufland.Exceptions.BillOverLoadedException;
+import sk.itsovy.kaufland.Export.ExportToXML;
 import sk.itsovy.kaufland.Models.Drink.Draft;
 import sk.itsovy.kaufland.Models.Food.Fruit;
 import sk.itsovy.kaufland.Models.Other.Goods;
@@ -25,6 +31,18 @@ public class Application {
 			e.printStackTrace();
 		}
 		b.end();
+		try {
+			ExportToXML.export(b);
+		} catch (DOMException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (ParseException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		System.out.println("begin of write");
 		Database db = new Database();
 		try {
