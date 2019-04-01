@@ -11,7 +11,9 @@ import sk.itsovy.kaufland.Exceptions.BillNotClosedException;
 import sk.itsovy.kaufland.Exceptions.BillOverLoadedException;
 import sk.itsovy.kaufland.Export.ExportToXML;
 import sk.itsovy.kaufland.Models.Drink.Draft;
+import sk.itsovy.kaufland.Models.Food.Food;
 import sk.itsovy.kaufland.Models.Food.Fruit;
+import sk.itsovy.kaufland.Models.Food.Pastry;
 import sk.itsovy.kaufland.Models.Other.Goods;
 import sk.itsovy.kaufland.enums.Category;
 
@@ -22,7 +24,8 @@ public class Application {
 		try {
 			b.add(new Fruit("Jablko", 0.59, 1.25));
 			b.add(new Draft("Coca Cola", 1.25, false, 0.5));
-			b.add(new Goods("TEC-9", 15.99,  2,Category.School));
+			b.add(new Goods("Prievidzka žárovečka", 15.99,  2,Category.School));
+			b.add(new Goods("prievidzka žárovečka", 15.99, 1, Category.School));
 		} catch (BillOverLoadedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -53,6 +56,7 @@ public class Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		b.print();
 	}
 	static Application getInstance(){
 		return app;

@@ -28,10 +28,27 @@ public class Bill {
 		if(end) {
 			throw new BillClosedException("Bill is closed");
 		}
-		list.add(i);
+		Item toUpdate = list.stream().filter(item -> i.getName().toLowerCase().equals(item.getName().toLowerCase()) && i.getClass().getName().equals(item.getClass().getName())).findAny().orElse(null);
+		if(toUpdate == null) {
+			list.add(i);
+			return;
+		}
+		update(toUpdate, i);
 	}
 	public LinkedList<Item> getBill(){
 		return list;
+	}
+	public void update(Item toUpdate, Item item) {
+		if(toUpdate instanceof PcsInterface) {
+			int newAmount = ((PcsInterface) toUpdate).getAmount() + ((PcsInterface) item).getAmount();
+			((PcsInterface) toUpdate).setAmount(newAmount);
+		}else if(toUpdate instanceof Fruit) {
+			double newWeight = ((Fruit) toUpdate).getWeight() + ((Fruit) item).getWeight();
+			((Fruit) toUpdate).setWeight(newWeight);
+		}else if(toUpdate instanceof DraftInterface) {
+			double newVolume = ((DraftInterface) toUpdate).getVolume() + ((DraftInterface) item).getVolume();
+			((DraftInterface) toUpdate).setVolume(newVolume);
+		}
 	}
 	public void remove(Item i) {
 		list.remove(i);
